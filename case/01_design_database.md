@@ -26,8 +26,5 @@ El diseño lógico define la estructura de las entidades y sus relaciones sin co
 
 ![Diseño Lógico](../image/dise%C3%B1o%20logico.jpeg)
 
----
 
-### 📄 PDF de Diseño Lógico
-<iframe src="https://docs.google.com/gview?url=https://raw.githubusercontent.com/tu-usuario/tu-repo/main/case/_ASOCIACION_DE_PITAJAYA_-_TUTAWAYTA_%28San_Vicente%29_Physical_Export.pdf&embedded=true" width="100%" height="800" style="border: 1px solid #ddd;"></iframe>
 
