@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#4CAF50">
+  <title>Libro de Reclamaciones — Tuta Wayta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/libro.css') }}" />
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar__inner">
+      <a class="navbar__brand" href="#">
+        <span class="navbar__icon">✿</span>
+        <span class="navbar__name">TUTA WAYTA</span>
+      </a>
+      <ul class="navbar__links">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/productos">Productos</a></li>
+        <li><a href="/nosotros">Nosotros</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+        <li><a href="/libro" class="active">Libro de Reclamaciones</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- FLASH -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for cat, msg in messages %}
+          <div class="flash flash--{{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__inner">
+      <div class="hero__icon">📋</div>
+      <div class="hero__text">
+        <h1>Libro de <em>Reclamaciones</em></h1>
+        <p>De conformidad con el Código de Protección y Defensa del Consumidor.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="layout">
+
+      <div class="card">
+        <div class="card__head">
+          <h2>Nueva Reclamación / Queja</h2>
+          <p>Completa los campos obligatorios <span class="req">*</span></p>
+        </div>
+
+        <!-- TIPO -->
+        <div class="tipo">
+          <label class="tipo__opt">
+            <input type="radio" name="tipo_sel" value="reclamacion" checked />
+            <span class="tipo__card">
+              <span class="tipo__emoji">⚠️</span>
+              <strong>Reclamación</strong>
+              <small>Producto o servicio</small>
+            </span>
+          </label>
+          <label class="tipo__opt">
+            <input type="radio" name="tipo_sel" value="queja" />
+            <span class="tipo__card">
+              <span class="tipo__emoji">📢</span>
+              <strong>Queja</strong>
+              <small>Atención recibida</small>
+            </span>
+          </label>
+        </div>
+
+        <!-- BANNER -->
+        <div class="tipo-banner" id="tipo-banner">
+          <span id="banner-icon">⚠️</span>
+          <div>
+            <strong id="banner-title">Estás registrando una Reclamación</strong>
+            <p id="banner-desc">Disconformidad con productos o servicios.</p>
+          </div>
+        </div>
+
+        <!-- INFO QUEJA -->
+        <div class="queja-info" id="queja-info">
+          <h4>📢 ¿Qué es una Queja?</h4>
+          <ul>
+            <li>Mal trato o actitud del personal de atención</li>
+            <li>Demoras injustificadas en la atención</li>
+            <li>Incumplimiento de procedimientos internos</li>
+            <li>Falta de información o asesoramiento</li>
+          </ul>
+        </div>
+
+        <!-- FORM -->
+        <form id="libroForm" novalidate>
+          <input type="hidden" id="tipo" name="tipo" value="reclamacion" />
+
+          <!-- 01 DATOS DEL CONSUMIDOR -->
+          <fieldset class="section">
+            <legend><span class="num">01</span> Datos del Consumidor</legend>
+            <div class="grid">
+
+              <div class="field">
+                <label>Nombres <span class="req">*</span></label>
+                <input type="text" id="nombres" name="nombres"
+                       placeholder="Ej: María" required minlength="3" maxlength="60" />
+                <span class="err" id="err-nombres"></span>
+              </div>
+
+              <div class="field">
+                <label>Apellidos <span class="req">*</span></label>
+                <input type="text" id="apellidos" name="apellidos"
+                       placeholder="Ej: García López" required minlength="3" maxlength="60" />
+                <span class="err" id="err-apellidos"></span>
+              </div>
+
+              <div class="field">
+                <label>Tipo Documento <span class="req">*</span></label>
+                <select id="doc_tipo" name="doc_tipo" required>
+                  <option value="">Seleccionar...</option>
+                  <option value="DNI">DNI</option>
+                  <option value="CE">Carnet Extranjería</option>
+                  <option value="Pasaporte">Pasaporte</option>
+                </select>
+                <span class="err" id="err-doc_tipo"></span>
+              </div>
+
+              <div class="field">
+                <label>Número Documento <span class="req">*</span></label>
+                <input type="text" id="doc_num" name="doc_num"
+                       placeholder="12345678" required maxlength="12" inputmode="numeric" />
+                <span class="err" id="err-doc_num"></span>
+              </div>
+
+              <div class="field">
+                <label>Correo <span class="req">*</span></label>
+                <input type="email" id="email" name="email"
+                       placeholder="correo@ejemplo.com" required maxlength="100" />
+                <span class="err" id="err-email"></span>
+              </div>
+
+              <div class="field">
+                <label>Teléfono <span class="req">*</span></label>
+                <input type="tel" id="telefono" name="telefono"
+                       placeholder="987654321" required maxlength="9" inputmode="numeric" />
+                <span class="err" id="err-telefono"></span>
+              </div>
+
+              <div class="field field--full">
+                <label>Dirección</label>
+                <input type="text" id="direccion" name="direccion"
+                       maxlength="150" placeholder="Calle, distrito..." />
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- 02 BIEN / SERVICIO -->
+          <fieldset class="section">
+            <legend><span class="num">02</span> Bien / Servicio</legend>
+            <div class="grid">
+
+              <div class="field">
+                <label>Monto (S/)</label>
+                <input type="number" id="monto" name="monto"
+                       min="0" max="99999" step="0.01" placeholder="0.00" />
+              </div>
+
+              <div class="field">
+                <label>Fecha Compra <span class="req">*</span></label>
+                <input type="date" id="fecha_compra" name="fecha_compra" required />
+                <span class="err" id="err-fecha_compra"></span>
+              </div>
+
+              <div class="field field--full">
+                <label>Descripción Bien / Servicio <span class="req">*</span></label>
+                <input type="text" id="bien" name="bien"
+                       required minlength="5" maxlength="150"
+                       placeholder="Ej: Pitahaya orgánica 1kg" />
+                <span class="err" id="err-bien"></span>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- SECCIÓN EXTRA QUEJA (oculta por defecto) -->
+          <fieldset class="section queja-section" id="queja-extra">
+            <legend><span class="num num--pink">Q</span> Detalles de la Queja</legend>
+            <div class="grid">
+
+              <!-- Tipo de atención -->
+              <div class="field field--full">
+                <label>Tipo de Atención Recibida <span class="req">*</span></label>
+                <div class="radio-group" id="rg-tipo_atencion">
+                  <label class="radio-chip">
+                    <input type="radio" name="tipo_atencion" value="presencial">
+                    <span>🏪 Presencial</span>
+                  </label>
+                  <label class="radio-chip">
+                    <input type="radio" name="tipo_atencion" value="telefonica">
+                    <span>📞 Telefónica</span>
+                  </label>
+                  <label class="radio-chip">
+                    <input type="radio" name="tipo_atencion" value="virtual">
+                    <span>💻 Virtual / WhatsApp</span>
+                  </label>
+                  <label class="radio-chip">
+                    <input type="radio" name="tipo_atencion" value="delivery">
+                    <span>🚚 Delivery</span>
+                  </label>
+                </div>
+                <span class="err" id="err-tipo_atencion"></span>
+              </div>
+
+              <!-- Personal involucrado -->
+              <div class="field field--full">
+                <label>Nombre del Personal Involucrado</label>
+                <input type="text" id="personal" name="personal"
+                       maxlength="100"
+                       placeholder="Nombre o descripción del colaborador (opcional)" />
+                <span class="field-hint">Si no recuerdas el nombre, describe el área o turno.</span>
+              </div>
+
+              <!-- Fecha y hora incidente -->
+              <div class="field">
+                <label>Fecha del Incidente <span class="req">*</span></label>
+                <input type="date" id="fecha_incidente" name="fecha_incidente" />
+                <span class="err" id="err-fecha_incidente"></span>
+              </div>
+
+              <div class="field">
+                <label>Hora Aproximada</label>
+                <input type="time" id="hora_incidente" name="hora_incidente" />
+              </div>
+
+              <!-- Motivos (checkboxes) -->
+              <div class="field field--full">
+                <label>Motivo Principal de la Queja <span class="req">*</span></label>
+                <div class="check-multi" id="chk-motivos">
+                  <label class="check-item">
+                    <input type="checkbox" name="motivo[]" value="trato">
+                    <span>Mal trato o falta de respeto</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="motivo[]" value="demora">
+                    <span>Tiempo de espera excesivo</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="motivo[]" value="informacion">
+                    <span>Información incorrecta o incompleta</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="motivo[]" value="incumplimiento">
+                    <span>Incumplimiento de compromisos</span>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" name="motivo[]" value="otro">
+                    <span>Otro motivo</span>
+                  </label>
+                </div>
+                <span class="err" id="err-motivos"></span>
+              </div>
+
+              <!-- Calificación estrellas -->
+              <div class="field field--full">
+                <label>Calificación de la Atención Recibida <span class="req">*</span></label>
+                <div class="stars" id="stars">
+                  <span class="star" data-val="1">★</span>
+                  <span class="star" data-val="2">★</span>
+                  <span class="star" data-val="3">★</span>
+                  <span class="star" data-val="4">★</span>
+                  <span class="star" data-val="5">★</span>
+                </div>
+                <span class="cal-label" id="cal-label">Haz clic para calificar</span>
+                <input type="hidden" id="calificacion" name="calificacion" value="" />
+                <span class="err" id="err-calificacion"></span>
+              </div>
+
+              <!-- Primera vez -->
+              <div class="field field--full">
+                <label>¿Es la primera vez que reportas este problema? <span class="req">*</span></label>
+                <div class="radio-group" id="rg-primera_vez">
+                  <label class="radio-chip">
+                    <input type="radio" name="primera_vez" value="si">
+                    <span>✅ Sí, primera vez</span>
+                  </label>
+                  <label class="radio-chip">
+                    <input type="radio" name="primera_vez" value="no">
+                    <span>🔁 No, ya reporté antes</span>
+                  </label>
+                </div>
+                <span class="err" id="err-primera_vez"></span>
+              </div>
+
+              <!-- Referencia queja anterior (condicional) -->
+              <div class="field field--full" id="ref-anterior" style="display:none;">
+                <label>N° de Queja Anterior (Referencia)</label>
+                <input type="text" id="ref_queja" name="ref_queja"
+                       maxlength="30" placeholder="Ej: QJ-2025-001" />
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- 03 DETALLE -->
+          <fieldset class="section">
+            <legend><span class="num" id="num-detalle">03</span> Detalle</legend>
+            <div class="grid">
+
+              <div class="field field--full">
+                <label>Descripción <span class="req">*</span></label>
+                <textarea id="detalle" name="detalle" rows="5"
+                          required minlength="20" maxlength="1000"
+                          placeholder="Describe lo ocurrido con el mayor detalle posible..."></textarea>
+                <span class="err" id="err-detalle"></span>
+                <span class="counter" id="char-counter">0 / 1000 caracteres</span>
+              </div>
+
+              <div class="field field--full">
+                <label>Pedido <span class="req">*</span></label>
+                <textarea id="pedido" name="pedido" rows="3"
+                          required minlength="10" maxlength="500"
+                          placeholder="¿Qué solución esperas?"></textarea>
+                <span class="err" id="err-pedido"></span>
+              </div>
+
+            </div>
+          </fieldset>
+
+          <!-- 04 CONFIRMACIÓN -->
+          <fieldset class="section">
+            <legend><span class="num" id="num-confirmacion">04</span> Confirmación</legend>
+            <div class="check-wrap">
+              <label class="check-label">
+                <input type="checkbox" id="acepto" />
+                <span class="checkmark"></span>
+                <span>Declaro que la información proporcionada es verídica y completa.</span>
+              </label>
+              <span class="err" id="err-acepto"></span>
+            </div>
+            <p class="fecha-reg">Fecha de registro: <strong id="fecha-hoy"></strong></p>
+          </fieldset>
+
+          <!-- BOTONES -->
+          <div class="actions">
+            <button type="button" class="btn btn--sec" id="btnLimpiar">Limpiar</button>
+            <button type="submit" class="btn btn--pri" id="btnEnviar">Enviar Reclamación →</button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- ASIDE -->
+      <aside class="aside">
+        <div class="info info--green">
+          <h3>⏱ Plazo</h3>
+          <p>Máximo <strong>15 días hábiles</strong> para dar respuesta.</p>
+        </div>
+        <div class="info info--pink">
+          <h3>🔖 N° Hoja</h3>
+          <div class="num-hoja" id="numero-hoja">—</div>
+        </div>
+        <div class="info info--blue">
+          <h3>📞 Contacto</h3>
+          <p>¿Necesitas ayuda? Llámanos al <strong>01-234-5678</strong></p>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- MODAL ÉXITO -->
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <div class="modal__icon" id="modal-icon">✅</div>
+      <h2 id="modal-titulo">¡Reclamación Registrada!</h2>
+      <p>Tu registro ha sido guardado correctamente.</p>
+      <div class="modal__num">
+        Hoja N° <strong id="modalNum"></strong>
+      </div>
+      <p class="modal__nota">
+        Respuesta máxima: <strong id="modal-plazo">15 días hábiles</strong>
+      </p>
+      <div class="modal__btns">
+        <button class="btn btn--sec" id="btnImprimir">🖨 Imprimir</button>
+        <button class="btn btn--pri" id="btnCerrar">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2025 Tuta Wayta — Libro de Reclamaciones</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/libro.js') }}"></script>
+
+</body>
+</html>
